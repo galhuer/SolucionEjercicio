@@ -108,3 +108,29 @@ La [ayuda de Animals2](https://search.r-project.org/CRAN/refmans/robustbase/html
 describe un `data.frame` con 65 animales terrestres: los 62 mamíferos y
 otros tres animales. Contiene las mismas variables y unidades, y se obtiene
 como unión de `MASS::Animals` y `MASS::mammals`, eliminando registros duplicados.
+
+# 2. Primera exploración: dim, head, tail y str
+
+## mammals
+
+```{r explorar-mammals, echo=TRUE}
+dim(mammals)
+head(mammals)
+tail(mammals)
+str(mammals)
+```
+
+## Animals2
+
+```{r explorar-animals2, echo=TRUE}
+dim(Animals2)
+head(Animals2)
+tail(Animals2)
+str(Animals2)
+```
+
+`mammals` tiene `r nrow(mammals)` filas y `r ncol(mammals)` columnas;
+`Animals2` tiene `r nrow(Animals2)` filas y `r ncol(Animals2)` columnas.
+Las filas representan animales y las dos columnas contienen sus pesos.
+Los conjuntos tienen un orden de filas diferente, por lo que se compararán
+por nombres y valores, en lugar de por la posición de cada fila.
