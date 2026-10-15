@@ -162,3 +162,25 @@ length(commonAnimals)
 Hay **`r length(commonAnimals)` nombres idénticos** en los dos conjuntos.
 `intersect` compara literalmente las etiquetas; las diferencias en los
 nombres de algunos registros se revisan en el apartado 6.
+
+# 5. Animales no comunes: setdiff
+
+```{r animales-no-comunes, echo=TRUE}
+soloMammals <- setdiff(rownames(mammals), rownames(Animals2))
+soloAnimals2 <- setdiff(rownames(Animals2), rownames(mammals))
+soloMammals
+soloAnimals2
+c(solo_mammals = length(soloMammals),
+  solo_Animals2 = length(soloAnimals2),
+  total_etiquetas_exclusivas = length(soloMammals) + length(soloAnimals2))
+```
+
+La comparación literal devuelve **`r length(soloMammals)` nombres exclusivos
+de mammals** y **`r length(soloAnimals2)` de Animals2**, en total
+**`r length(soloMammals) + length(soloAnimals2)` etiquetas exclusivas**.
+
+Los cuatro nombres de `soloMammals` corresponden a mamíferos. Entre los
+siete nombres de `soloAnimals2` hay cuatro etiquetas de mamíferos y tres
+dinosaurios: `Dipliodocus` (grafía usada en los datos), `Triceratops` y
+`Brachiosaurus`. En el siguiente apartado se comprueban las diferencias
+de etiquetado y de valores.
