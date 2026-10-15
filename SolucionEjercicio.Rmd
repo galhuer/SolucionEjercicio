@@ -134,3 +134,19 @@ str(Animals2)
 Las filas representan animales y las dos columnas contienen sus pesos.
 Los conjuntos tienen un orden de filas diferente, por lo que se compararán
 por nombres y valores, en lugar de por la posición de cada fila.
+
+# 3. Nombres de las filas y las columnas
+
+```{r nombres-mammals, echo=TRUE}
+rownames(mammals)
+colnames(mammals)
+```
+
+```{r nombres-animals2, echo=TRUE}
+rownames(Animals2)
+colnames(Animals2)
+```
+
+Las columnas de ambos conjuntos son `body` y `brain`. Los nombres de las
+filas identifican a los animales; se respetan exactamente sus mayúsculas,
+espacios y grafías para la primera comparación.
