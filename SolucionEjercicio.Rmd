@@ -184,3 +184,92 @@ siete nombres de `soloAnimals2` hay cuatro etiquetas de mamíferos y tres
 dinosaurios: `Dipliodocus` (grafía usada en los datos), `Triceratops` y
 `Brachiosaurus`. En el siguiente apartado se comprueban las diferencias
 de etiquetado y de valores.
+
+# 6. Diferencias entre los registros no comunes
+
+## Comparación de sus pesos
+
+```{r comparar-exclusivos, echo=TRUE}
+exclusivosMammals <- data.frame(
+  nombre = soloMammals,
+  mammals[soloMammals, , drop = FALSE],
+  row.names = NULL
+)
+exclusivosAnimals2 <- data.frame(
+  nombre = soloAnimals2,
+  Animals2[soloAnimals2, , drop = FALSE],
+  row.names = NULL
+)
+knitr::kable(exclusivosMammals, caption = "Registros con nombre exclusivo de mammals")
+knitr::kable(exclusivosAnimals2, caption = "Registros con nombre exclusivo de Animals2")
+```
+
+Buscamos los pares con **los mismos pesos de cuerpo y cerebro**, manteniendo
+sus nombres originales:
+
+```{r equivalencias-etiquetas, echo=TRUE}
+equivalencias <- merge(
+  exclusivosMammals, exclusivosAnimals2,
+  by = c("body", "brain"),
+  suffixes = c("_mammals", "_Animals2")
+)
+equivalencias <- equivalencias[, c("nombre_mammals", "nombre_Animals2", "body", "brain")]
+knitr::kable(equivalencias, caption = "Pares de etiquetas con los mismos valores")
+```
+
+Los cuatro pares son `Arctic fox` / `Artic fox`, `Arctic ground squirrel` /
+`Artic ground squirrel`, `Patas monkey` / `Potar monkey` y `Mole rat` / `Mole`.
+En estos conjuntos identifican registros con valores idénticos. Esta
+comprobación explica por qué los nombres comunes son 58 aunque la ayuda
+describa 62 registros de mamíferos compartidos.
+
+## Comparación después de armonizar las cuatro etiquetas
+
+Se crea un vector auxiliar de nombres; los dos conjuntos originales y la
+variable `commonAnimals` conservan sus valores.
+
+```{r armonizar-nombres, echo=TRUE}
+mapaNombres <- setNames(equivalencias$nombre_mammals,
+                       equivalencias$nombre_Animals2)
+nombresArmonizados <- rownames(Animals2)
+pos <- match(nombresArmonizados, names(mapaNombres))
+nombresArmonizados[!is.na(pos)] <- unname(mapaNombres[pos[!is.na(pos)]])
+
+comunesArmonizados <- intersect(rownames(mammals), nombresArmonizados)
+extrasReales <- setdiff(nombresArmonizados, rownames(mammals))
+length(comunesArmonizados)
+extrasReales
+knitr::kable(
+  Animals2[match(extrasReales, nombresArmonizados), , drop = FALSE],
+  caption = "Tres registros adicionales de Animals2"
+)
+```
+
+Tras armonizar las etiquetas se reconocen **`r length(comunesArmonizados)`
+registros comunes**. Los **`r length(extrasReales)` registros adicionales**
+de `Animals2` corresponden a los tres dinosaurios.
+
+## Valores de los registros compartidos
+
+```{r comprobar-valores, echo=TRUE}
+valoresIdenticos <- all(mammals[commonAnimals, ] == Animals2[commonAnimals, ])
+valoresIdenticos
+stopifnot(
+  nrow(equivalencias) == 4L,
+  length(commonAnimals) == 58L,
+  length(comunesArmonizados) == 62L,
+  length(extrasReales) == 3L,
+  valoresIdenticos
+)
+```
+
+Los pesos de los 58 registros con el mismo nombre coinciden exactamente.
+La diferencia de tamaño entre los conjuntos se explica por los tres
+dinosaurios; las otras diferencias detectadas por `setdiff` son diferencias
+de etiquetado de cuatro registros de mamíferos.
+
+# Información de la sesión
+
+```{r informacion-sesion, echo=TRUE}
+sessionInfo()
+```
