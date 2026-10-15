@@ -150,3 +150,15 @@ colnames(Animals2)
 Las columnas de ambos conjuntos son `body` y `brain`. Los nombres de las
 filas identifican a los animales; se respetan exactamente sus mayúsculas,
 espacios y grafías para la primera comparación.
+
+# 4. Animales comunes: intersect
+
+```{r animales-comunes, echo=TRUE}
+commonAnimals <- intersect(rownames(mammals), rownames(Animals2))
+commonAnimals
+length(commonAnimals)
+```
+
+Hay **`r length(commonAnimals)` nombres idénticos** en los dos conjuntos.
+`intersect` compara literalmente las etiquetas; las diferencias en los
+nombres de algunos registros se revisan en el apartado 6.
